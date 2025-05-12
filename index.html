@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icons/icon-192.png" type="image/png" />
+    <meta name="theme-color" content="#3b82f6" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simon Says Game</title>
+
+    <!-- ✅ Tailwind config with media-based dark mode -->
+    <script>
+      tailwind.config = {
+        darkMode: "media",
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95) translate(-50%, -50%);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translate(-50%, -50%);
+        }
+      }
+      .animate-fadeIn {
+        animation: fadeIn 0.2s ease-out;
+      }
+    </style>
+  </head>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("sw.js")
+        .then(() => console.log("✅ Service Worker Registered"))
+        .catch((err) => console.error("Service Worker Error:", err));
+    }
+  </script>
+
+  <body
+    class="bg-gray-100 dark:bg-gray-900 text-black dark:text-white min-h-screen font-sans flex items-center justify-center p-4"
+  >
+    <div
+      id="gameBox"
+      class="w-full max-w-md bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center relative"
+    >
+      <!-- Mute Button -->
+      <button
+        id="toggleMute"
+        class="absolute top-4 left-4 text-xl hover:text-blue-500"
+      >
+        <i id="muteIcon" class="ph ph-speaker-high"></i>
+      </button>
+
+      <!-- Help Icon -->
+      <button
+        id="toggleRules"
+        class="absolute top-4 right-4 text-xl hover:text-blue-500"
+      >
+        <i class="ph ph-question"></i>
+      </button>
+
+      <h1
+        class="text-3xl sm:text-4xl font-bold text-blue-600 dark:text-blue-300 mb-4"
+      >
+        Simon Says Game
+      </h1>
+
+      <div class="flex justify-center gap-6 text-lg font-semibold mb-6">
+        <span>Level: <span id="level">0</span></span>
+        <span>High Score: <span id="highScore">0</span></span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 sm:gap-6 mb-8">
+        <div
+          id="red"
+          class="btn w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-red-500 rounded-md cursor-pointer"
+        ></div>
+        <div
+          id="yellow"
+          class="btn w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-yellow-400 rounded-md cursor-pointer"
+        ></div>
+        <div
+          id="green"
+          class="btn w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-green-500 rounded-md cursor-pointer"
+        ></div>
+        <div
+          id="purple"
+          class="btn w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-purple-500 rounded-md cursor-pointer"
+        ></div>
+      </div>
+
+      <button
+        id="startBtn"
+        class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition"
+      >
+        Start Game
+      </button>
+
+      <div
+        id="rulesModal"
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-700 shadow-xl rounded-lg p-5 w-[90%] sm:w-[85%] md:w-[80%] z-10 hidden animate-fadeIn"
+      >
+        <button
+          id="closeRules"
+          class="absolute top-2 right-3 text-xl text-gray-500 hover:text-red-500"
+        >
+          &times;
+        </button>
+        <h2 class="text-2xl font-semibold mb-4 text-center">📝 How to Play</h2>
+        <ul
+          class="text-gray-700 dark:text-gray-200 list-disc pl-5 space-y-2 text-left text-sm sm:text-base"
+        >
+          <li>Click <strong>Start Game</strong> to begin.</li>
+          <li>Watch the sequence of flashing buttons.</li>
+          <li>Repeat the pattern by clicking in the same order.</li>
+          <li>One mistake = game over!</li>
+          <li>Try to beat your high score.</li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      // Help modal
+      const toggleBtn = document.getElementById("toggleRules");
+      const closeBtn = document.getElementById("closeRules");
+      const modal = document.getElementById("rulesModal");
+
+      toggleBtn.addEventListener("click", () =>
+        modal.classList.remove("hidden")
+      );
+      closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
+    </script>
+  </body>
+</html>
